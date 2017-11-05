@@ -1,0 +1,18 @@
+{
+  "workbench.iconTheme": "vscode-icons",
+  "vsicons.dontShowNewVersionMessage": true,
+  "editor.formatOnSave": true, // THIS WILL TRIGGER PRETTIER ON SAVE
+  // Enable/disable default JavaScript formatter (For Prettier)
+  "javascript.format.enable": false,
+  "prettier.eslintIntegration": true,
+  "workbench.colorTheme": "One Dark Pro",
+  // Configure glob patterns for excluding files and folders. For example, the files explorer decides which files and folders to show or hide based on this setting.
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true,
+    "**/WOF.*": true
+  },
+  "emmet.includeLanguages": {
+    "javascript": "html"
+  }
+}
