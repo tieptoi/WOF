@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
 using WOF.Entities;
 using System.Threading;
+using System.Linq.Expressions;
 
 namespace WOF.Controllers
 {
@@ -26,12 +27,59 @@ namespace WOF.Controllers
 			_iLogger = iLogger;
 		}
 
-		public IActionResult GetPrizes()
+        [HttpGet]
+        public IActionResult GetPrizes([FromQuery] string sortBy,[FromQuery] string filterBy,[FromQuery] string searchString,[FromQuery] int? page = 1)
 		{
 			try
 			{
 				Thread.Sleep(1000);
-				var prizeEntities = _prizeRepository.GetAllPrizes();
+                Func<IQueryable<Prize>, IOrderedQueryable<Prize>> orderBy = null;
+                Expression<Func<Prize, bool>> filter = null;
+
+                if(!string.IsNullOrEmpty(sortBy))
+                {
+                    switch (sortBy)
+                    {
+                        case "name":
+                            orderBy = (prize) => prize.OrderBy(x => x.Name);
+                            break;
+                        case "name_desc":
+                            orderBy = (prize) => prize.OrderByDescending(x => x.Name);
+                            break;
+                        case "id":
+                            orderBy = (prize) => prize.OrderBy(x => x.Id);
+                            break;
+                        case "id_desc":
+                            orderBy = (prize) => prize.OrderByDescending(x => x.Id);
+                            break;
+                        default:  // Name ascending 
+                            orderBy = (prize) => prize.OrderBy(x => x.Name);
+                            break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(filterBy) &&
+                    !string.IsNullOrEmpty(searchString))
+                {
+                    switch (filterBy)
+                    {
+                        case "name":
+                            filter = prize => prize.Name.Contains(searchString);
+                            break;
+                        case "id":
+                            filter = prize => prize.Id.ToString() == searchString;
+                            break;
+                        case "description":
+                            filter = prize => prize.Description.Contains(searchString);
+                            break;
+                        default:
+                            filter = prize => prize.Name.Contains(searchString);
+                            break;
+                    }
+                    page = 1;
+                }
+
+                var prizeEntities = _prizeRepository.GetAllPrizes(filter, orderBy, page, 3);
 
 				var results = AutoMapper.Mapper.Map<IEnumerable<PrizeDto>>(prizeEntities);
 
@@ -131,6 +179,8 @@ namespace WOF.Controllers
 
 				Mapper.Map(prize, prizeEntity);
 
+                _prizeRepository.Update((prizeEntity));
+
 
 				if (!_prizeRepository.Save())
 				{
@@ -207,6 +257,8 @@ namespace WOF.Controllers
 			}
 
 			Mapper.Map(prizeToPatch, prizeEntity);
+
+            _prizeRepository.Update((prizeEntity));
 
 			if (!_prizeRepository.Save())
 			{
