@@ -5,7 +5,7 @@
   // Enable/disable default JavaScript formatter (For Prettier)
   "javascript.format.enable": false,
   "prettier.eslintIntegration": true,
-  "workbench.colorTheme": "One Dark Pro",
+  "workbench.colorTheme": "Atom One Dark",
   // Configure glob patterns for excluding files and folders. For example, the files explorer decides which files and folders to show or hide based on this setting.
   "files.exclude": {
     "**/bin": true,
@@ -13,6 +13,6 @@
     "**/WOF.*": true
   },
   "emmet.includeLanguages": {
-    "javascript": "html"
+    "javascriptreact": "html"
   }
 }

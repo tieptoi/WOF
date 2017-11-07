@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 
 import Header from './common/layout/Header';
-import ErrorBoundary from './common/layout/ErrorBoundary';
 import Notification from './common/layout/Notification';
 import SlideNav from './common/layout/SlideNav';
 
@@ -19,31 +18,29 @@ import Styles from '../components/common/style/Styles';
 
 class App extends Component {
   render() {
-    const { classes, open, location } = this.props;
+    const { classes, open } = this.props;
     return (
-      <ErrorBoundary>
-        <div className={classes.root}>
-          <div className={classes.appFrame}>
-            <Header />
-            <SlideNav />
-            <main
-              className={classNames(
-                classes.content,
-                open && classes.contentShift,
-              )}
-            >
-              <Switch location={location}>
-                <Route exact path="/" component={HomePage} />
-                <Route path="/login" component={LoginPage} />
-                <Route path="/prizes" component={PrizesPage} />
-                <Route path="/prizeEdit/:id" component={PrizeEditPage} />
-                <Route path="/prizeEdit/" component={PrizeEditPage} />
-              </Switch>
-              <Notification />
-            </main>
-          </div>
+      <div className={classes.root}>
+        <div className={classes.appFrame}>
+          <Header />
+          <SlideNav />
+          <main
+            className={classNames(
+              classes.content,
+              open && classes.contentShift,
+            )}
+          >
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route path="/login" component={LoginPage} />
+              <Route path="/prizes" component={PrizesPage} />
+              <Route path="/prizeEdit/:id" component={PrizeEditPage} />
+              <Route path="/prizeEdit/" component={PrizeEditPage} />
+            </Switch>
+            <Notification />
+          </main>
         </div>
-      </ErrorBoundary>
+      </div>
     );
   }
 }
@@ -51,7 +48,6 @@ class App extends Component {
 App.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
-  location: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -61,4 +57,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(withStyles(Styles, { withTheme: true })(App));
+export default connect(mapStateToProps)(withStyles(Styles, {
+  withTheme: true,
+})(App));

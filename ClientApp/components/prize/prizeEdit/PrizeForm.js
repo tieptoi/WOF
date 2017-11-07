@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import Button from 'material-ui/Button';
 
-import SwitchWithLabel from '../common/form/SwitchwithLabel';
-import TextFieldWithLabel from '../common/form/TextFieldWithLabel';
-import ButtonLoading from '../common/form/ButtonLoading';
+import SwitchWithLabel from '../../common/form/SwitchwithLabel';
+import TextFieldWithLabel from '../../common/form/TextFieldWithLabel';
+import ButtonLoading from '../../common/form/ButtonLoading';
 
 // validate the form before submitting it
 const validate = (values) => {

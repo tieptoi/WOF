@@ -30,7 +30,11 @@ class SlideNav extends Component {
   }
 
   handleTouchTap() {
-    this.props.closeSideNav();
+    if (!this.props.open) {
+      this.props.openSideNav();
+    } else {
+      this.props.closeSideNav();
+    }
   }
 
   handleRequestClose(open) {
@@ -128,7 +132,7 @@ SlideNav.propTypes = {
 };
 
 function mapStateToProps(state) {
-  return { isLoading: state.ajaxCallsInProgress > 0, open: state.sideNav.open };
+  return { open: state.sideNav.open };
 }
 
 function mapDispatchToProps(dispatch) {

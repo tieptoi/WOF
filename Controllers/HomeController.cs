@@ -24,9 +24,6 @@ namespace WOF.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            //
-            _iLogger.LogDebug("Testing NLogger");
-
             return View();
         }
 

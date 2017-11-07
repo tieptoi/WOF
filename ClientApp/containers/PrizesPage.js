@@ -5,19 +5,31 @@ import { bindActionCreators } from 'redux';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 
-import { getAllPrizes, deletePrize } from '../actions/prizeActions';
+import {
+  getAllPrizes,
+  deletePrize,
+  selectAllPrizes,
+  selectPrize,
+  deselectAllPrizes,
+} from '../actions/prizeActions';
 import { showNotificationMessage } from '../actions/notificationActions';
-import PrizeList from '../components/prize/PrizeList';
+import PrizeList from '../components/prize/prizesPage/PrizeList';
 import CircularIndeterminate from '../components/common/CircularIndeterminate';
 import AlertDialog from '../components/common/AlertDialog';
 
 class PrizesPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { selectedPrize: {}, openDialog: false };
+    this.state = {
+      deletingPrize: {},
+      openDialog: false,
+    };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
+    this.handleSort = this.handleSort.bind(this);
+    this.handleSelectAllClick = this.handleSelectAllClick.bind(this);
+    this.handleRowSelect = this.handleRowSelect.bind(this);
   }
 
   componentDidMount() {
@@ -31,16 +43,30 @@ class PrizesPage extends Component {
   }
 
   handleDelete(prize) {
-    this.setState({ selectedPrize: prize, openDialog: true });
+    this.setState({ deletingPrize: prize, openDialog: true });
   }
 
   handleCloseAlertDialog(agree) {
-    this.setState({ selectedPrize: {}, openDialog: false });
+    this.setState({ deletingPrize: {}, openDialog: false });
     if (agree) {
       this.props
-        .deletePrize(this.state.selectedPrize)
+        .deletePrize(this.state.deletingPrize)
         .catch(err => this.props.showNotificationMessage(err.message));
     }
+  }
+  // eslint-disable-next-line no-unused-vars
+  handleSort(property) {} // eslint-disable-line class-methods-use-this
+
+  handleSelectAllClick() {
+    if (this.props.isAllPrizesSelected) {
+      this.props.deselectAllPrizes();
+    } else {
+      this.props.selectAllPrizes();
+    }
+  }
+
+  handleRowSelect(id) {
+    this.props.selectPrize(id);
   }
 
   render() {
@@ -63,9 +89,13 @@ class PrizesPage extends Component {
         </div>
         <PrizeList
           prizes={this.props.prizes}
+          selected={this.props.selectedPrizes}
           history={this.props.history}
           onDelete={this.handleDelete}
           onEdit={this.handleEdit}
+          onRequestSort={this.handleSort}
+          onSelectAllClick={this.handleSelectAllClick}
+          onRowSelect={this.handleRowSelect}
         />
         <div>
           <AlertDialog
@@ -85,20 +115,30 @@ PrizesPage.propTypes = {
   prizes: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   getAllPrizes: PropTypes.func.isRequired,
   deletePrize: PropTypes.func.isRequired,
+  selectPrize: PropTypes.func.isRequired,
   showNotificationMessage: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  selectedPrizes: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  isAllPrizesSelected: PropTypes.bool.isRequired,
+  deselectAllPrizes: PropTypes.func.isRequired,
+  selectAllPrizes: PropTypes.func.isRequired,
 };
 
 PrizesPage.defaultProps = {
   prizes: [],
 };
 
-const mapStateToProps = ({ prizes, ajaxCallsInProgress }) => ({
-  prizes,
+const mapStateToProps = ({ prize, ajaxCallsInProgress }) => ({
+  prizes: prize.prizes,
+  selectedPrizes: prize.selectedPrizes,
+  isAllPrizesSelected: prize.isAllPrizesSelected,
   isLoading: ajaxCallsInProgress > 0,
 });
 
 const mapDispatchToProps = dispatch => ({
+  deselectAllPrizes: bindActionCreators(deselectAllPrizes, dispatch),
+  selectAllPrizes: bindActionCreators(selectAllPrizes, dispatch),
+  selectPrize: bindActionCreators(selectPrize, dispatch),
   getAllPrizes: bindActionCreators(getAllPrizes, dispatch),
   deletePrize: bindActionCreators(deletePrize, dispatch),
   showNotificationMessage: bindActionCreators(

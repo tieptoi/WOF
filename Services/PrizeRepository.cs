@@ -48,13 +48,12 @@ namespace WOF.Services
             int skipRows = (page.Value - 1) * pageSize.Value;
             query = query.Take(pageSize.Value).Skip(skipRows);
 
-
             // Order By
             if(orderBy != null){
-                return orderBy(query).ToList();
-            }else{
-                return query.ToList();
-            }
+                query =  orderBy(query);
+            } 
+
+			return query.ToList();
         }
 
         public Prize GetPrize(int prizeId)

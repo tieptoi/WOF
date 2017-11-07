@@ -2,13 +2,13 @@ import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
 import { reducer as form } from 'redux-form';
 
-import prizes from './prizeReducer';
+import prize from './prizeReducer';
 import ajaxCallsInProgress from './ajaxStatusReducer';
 import notification from './notificationReducer';
 import sideNav from './sideNavReducer';
 
 const rootReducer = combineReducers({
-  prizes,
+  prize,
   ajaxCallsInProgress,
   notification,
   sideNav,

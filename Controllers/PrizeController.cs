@@ -63,11 +63,11 @@ namespace WOF.Controllers
                 {
                     switch (filterBy)
                     {
-                        case "name":
-                            filter = prize => prize.Name.Contains(searchString);
-                            break;
                         case "id":
                             filter = prize => prize.Id.ToString() == searchString;
+                            break;
+                        case "name":
+                            filter = prize => prize.Name.Contains(searchString);
                             break;
                         case "description":
                             filter = prize => prize.Description.Contains(searchString);

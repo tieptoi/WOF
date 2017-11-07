@@ -6,17 +6,29 @@ import { TableCell, TableRow } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
 import EditIcon from 'material-ui-icons/Edit';
+import Checkbox from 'material-ui/Checkbox';
 // import { red } from 'material-ui/colors';
 
-import Styles from '../../components/common/style/Styles';
+import Styles from '../../../components/common/style/Styles';
 
 class PrizesPage extends Component {
   render() {
     const {
-      prize, onEdit, onDelete, classes,
+      prize,
+      onEdit,
+      onDelete,
+      classes,
+      isSelected,
+      onRowSelect,
     } = this.props;
     return (
       <TableRow key={prize.id}>
+        <TableCell padding="checkbox">
+          <Checkbox
+            checked={isSelected}
+            onChange={() => onRowSelect(prize.id)}
+          />
+        </TableCell>
         <TableCell>{prize.id}</TableCell>
         <TableCell>{prize.name}</TableCell>
         <TableCell>{prize.description}</TableCell>
@@ -44,6 +56,8 @@ PrizesPage.propTypes = {
   onDelete: PropTypes.func.isRequired,
   prize: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onRowSelect: PropTypes.func.isRequired,
 };
 
 export default withStyles(Styles)(PrizesPage);

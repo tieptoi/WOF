@@ -4,8 +4,6 @@ import { withStyles } from 'material-ui/styles';
 
 import Table, {
   TableBody,
-  TableCell,
-  TableHead,
   TableRow,
   TableFooter,
   TablePagination,
@@ -14,13 +12,32 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 
 import PriceListRow from './PrizeListRow';
-import Styles from '../../components/common/style/Styles';
+import PriceListHead from './PrizeListHead';
+import PriceListToolbar from './PriceListToolbar';
+import Styles from '../../../components/common/style/Styles';
 
 class PrizesList extends Component {
+  constructor(pros) {
+    super(pros);
+    this.isSelected = this.isSelected.bind(this);
+  }
+
+  isSelected(id) {
+    return this.props.selected.indexOf(id) !== -1;
+  }
+
   render() {
     const {
-      prizes, onEdit, onDelete, classes,
+      prizes,
+      onEdit,
+      onDelete,
+      classes,
+      onRequestSort,
+      onSelectAllClick,
+      onRowSelect,
+      selected,
     } = this.props;
+
     return (
       <Grid
         container
@@ -34,32 +51,36 @@ class PrizesList extends Component {
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.root}>
+            <PriceListToolbar numSelected={selected.length} />
             <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Chances</TableCell>
-                  <TableCell>Quantity</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
+              <PriceListHead
+                onRequestSort={onRequestSort}
+                numSelected={selected.length}
+                onSelectAllClick={onSelectAllClick}
+                order="asc"
+                orderBy="id"
+                rowCount={prizes.length}
+              />
               <TableBody>
-                {prizes.map(prize => (
-                  <PriceListRow
-                    prize={prize}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    key={prize.id}
-                  />
-                ))}
+                {prizes.map((prize) => {
+                  const isSelected = this.isSelected(prize.id);
+                  return (
+                    <PriceListRow
+                      prize={prize}
+                      onEdit={onEdit}
+                      onDelete={onDelete}
+                      key={prize.id}
+                      isSelected={isSelected}
+                      onRowSelect={onRowSelect}
+                    />
+                  );
+                })}
               </TableBody>
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    count={prizes.length}
-                    rowsPerPage={8}
+                    count={13}
+                    rowsPerPage={3}
                     page={0}
                     /* onChangePage={this.handleChangePage} */
                     /* onChangeRowsPerPage={this.handleChangeRowsPerPage} */
@@ -81,11 +102,16 @@ PrizesList.propTypes = {
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   prizes: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  selected: PropTypes.array,
   classes: PropTypes.object.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  onRowSelect: PropTypes.func.isRequired,
 };
 
 PrizesList.defaultProps = {
   prizes: [],
+  selected: [],
 };
 
 export default withStyles(Styles)(PrizesList);

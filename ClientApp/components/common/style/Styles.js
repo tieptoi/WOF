@@ -3,7 +3,7 @@ import green from 'material-ui/colors/green';
 const styles = theme => ({
   root: {
     width: '100%',
-    // height: 430,
+    height: '100%',
     // marginTop: theme.spacing.unit * 3,
     zIndex: 1,
     overflow: 'hidden',

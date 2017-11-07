@@ -4,6 +4,18 @@ import * as types from '../constants/actionTypes';
 import { beginAjaxCall, ajaxCallError } from './ajaxStatusActions';
 import { showNotificationMessage } from './notificationActions';
 
+export function selectPrize(id) {
+  return { type: types.SELECT_PRIZE, id };
+}
+
+export function deselectAllPrizes() {
+  return { type: types.DESELECT_ALL_PRIZES };
+}
+
+export function selectAllPrizes() {
+  return { type: types.SELECT_ALL_PRIZES };
+}
+
 export function getAllPrizesSuccess(prizes) {
   return {
     type: types.GET_ALL_PRIZES_SUCCESS,
@@ -38,7 +50,9 @@ export function getPrize(id) {
     dispatch(beginAjaxCall());
     const request = axios.get(`/api/prize/${id}`);
     return request.then(
-      response => dispatch(getPrizeSuccess(response.data)),
+      (response) => {
+        dispatch(getPrizeSuccess(response.data));
+      },
       (err) => {
         dispatch(ajaxCallError());
         dispatch(showNotificationMessage('Invalid Prize ID !!'));
@@ -99,6 +113,7 @@ export function deletePrize(prize) {
     return request
       .then(() => {
         dispatch(deletePrizeSuccess(prize));
+        dispatch(deselectAllPrizes());
         dispatch(showNotificationMessage('Prize is deleted !!'));
       })
       .catch((err) => {

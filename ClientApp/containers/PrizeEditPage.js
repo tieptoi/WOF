@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography';
 
 import { getPrize, updatePrize, createPrize } from '../actions/prizeActions';
 import { showNotificationMessage } from '../actions/notificationActions';
-import PrizeForm from '../components/prize/PrizeForm';
+import PrizeForm from '../components/prize/prizeEdit/PrizeForm';
 import CircularIndeterminate from '../components/common/CircularIndeterminate';
 
 import Styles from '../components/common/style/Styles';
@@ -139,10 +139,11 @@ PrizeEditPage.defaultProps = {
   },
 };
 
-const mapStateToProps = ({ prizes, ajaxCallsInProgress }, ownProps) => {
+const mapStateToProps = ({ prize, ajaxCallsInProgress }, ownProps) => {
+  const { prizes } = prize;
   if (prizes.length > 0) {
     return {
-      prize: prizes.find(prize => prize.id == ownProps.match.params.id),
+      prize: prizes.find(p => p.id == ownProps.match.params.id),
       isLoading: ajaxCallsInProgress > 0,
     };
   }
