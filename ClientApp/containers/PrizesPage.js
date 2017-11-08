@@ -30,6 +30,7 @@ class PrizesPage extends Component {
     this.handleSort = this.handleSort.bind(this);
     this.handleSelectAllClick = this.handleSelectAllClick.bind(this);
     this.handleRowSelect = this.handleRowSelect.bind(this);
+    this.handleChangePage = this.handleChangePage.bind(this);
   }
 
   componentDidMount() {
@@ -56,6 +57,9 @@ class PrizesPage extends Component {
   }
   // eslint-disable-next-line no-unused-vars
   handleSort(property) {} // eslint-disable-line class-methods-use-this
+
+  // eslint-disable-next-line no-unused-vars
+  handleChangePage(page) {} // eslint-disable-line class-methods-use-this
 
   handleSelectAllClick() {
     if (this.props.isAllPrizesSelected) {
@@ -88,6 +92,7 @@ class PrizesPage extends Component {
           </Button>
         </div>
         <PrizeList
+          page={this.props.page}
           prizes={this.props.prizes}
           selected={this.props.selectedPrizes}
           history={this.props.history}
@@ -96,6 +101,7 @@ class PrizesPage extends Component {
           onRequestSort={this.handleSort}
           onSelectAllClick={this.handleSelectAllClick}
           onRowSelect={this.handleRowSelect}
+          onChangePage={this.handleChangePage}
         />
         <div>
           <AlertDialog
@@ -111,6 +117,7 @@ class PrizesPage extends Component {
 }
 
 PrizesPage.propTypes = {
+  page: PropTypes.number.isRequired,
   history: PropTypes.object.isRequired,
   prizes: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   getAllPrizes: PropTypes.func.isRequired,
@@ -132,6 +139,7 @@ const mapStateToProps = ({ prize, ajaxCallsInProgress }) => ({
   prizes: prize.prizes,
   selectedPrizes: prize.selectedPrizes,
   isAllPrizesSelected: prize.isAllPrizesSelected,
+  page: prize.page,
   isLoading: ajaxCallsInProgress > 0,
 });
 

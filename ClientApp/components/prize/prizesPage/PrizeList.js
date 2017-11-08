@@ -28,14 +28,16 @@ class PrizesList extends Component {
 
   render() {
     const {
+      page,
       prizes,
+      selected,
       onEdit,
       onDelete,
       classes,
       onRequestSort,
       onSelectAllClick,
       onRowSelect,
-      selected,
+      onChangePage,
     } = this.props;
 
     return (
@@ -80,9 +82,9 @@ class PrizesList extends Component {
                 <TableRow>
                   <TablePagination
                     count={13}
-                    rowsPerPage={3}
-                    page={0}
-                    /* onChangePage={this.handleChangePage} */
+                    rowsPerPage={5}
+                    page={page}
+                    onChangePage={onChangePage}
                     /* onChangeRowsPerPage={this.handleChangeRowsPerPage} */
                   />
                 </TableRow>
@@ -99,14 +101,16 @@ class PrizesList extends Component {
 }
 
 PrizesList.propTypes = {
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
   prizes: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   selected: PropTypes.array,
   classes: PropTypes.object.isRequired,
+  page: PropTypes.number.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
   onRowSelect: PropTypes.func.isRequired,
+  onChangePage: PropTypes.func.isRequired,
 };
 
 PrizesList.defaultProps = {
