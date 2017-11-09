@@ -11,6 +11,7 @@ import {
   selectAllPrizes,
   selectPrize,
   deselectAllPrizes,
+  changePrizePage,
 } from '../actions/prizeActions';
 import { showNotificationMessage } from '../actions/notificationActions';
 import PrizeList from '../components/prize/prizesPage/PrizeList';
@@ -31,6 +32,7 @@ class PrizesPage extends Component {
     this.handleSelectAllClick = this.handleSelectAllClick.bind(this);
     this.handleRowSelect = this.handleRowSelect.bind(this);
     this.handleChangePage = this.handleChangePage.bind(this);
+    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
   }
 
   componentDidMount() {
@@ -56,10 +58,22 @@ class PrizesPage extends Component {
     }
   }
   // eslint-disable-next-line no-unused-vars
-  handleSort(property) {} // eslint-disable-line class-methods-use-this
+  handleSort(property) {
+    // this.props.changePrizePage(
+    //   this.props.page,
+    //   this.props.rowPerPage,
+    //   property,
+    // );
+  } // eslint-disable-line class-methods-use-this
 
   // eslint-disable-next-line no-unused-vars
-  handleChangePage(page) {} // eslint-disable-line class-methods-use-this
+  handleChangePage(page) {
+    this.props.changePrizePage(page, this.props.sortBy, this.props.rowPerPage);
+  } // eslint-disable-line class-methods-use-this
+
+  handleChangeRowsPerPage(rowPerPage) {
+    this.props.changePrizePage(this.props.page, this.props.sortBy, rowPerPage);
+  }
 
   handleSelectAllClick() {
     if (this.props.isAllPrizesSelected) {
@@ -93,6 +107,9 @@ class PrizesPage extends Component {
         </div>
         <PrizeList
           page={this.props.page}
+          sortBy={this.props.sortBy}
+          rowPerPage={this.props.rowPerPage}
+          totalCount={this.props.totalCount}
           prizes={this.props.prizes}
           selected={this.props.selectedPrizes}
           history={this.props.history}
@@ -102,6 +119,7 @@ class PrizesPage extends Component {
           onSelectAllClick={this.handleSelectAllClick}
           onRowSelect={this.handleRowSelect}
           onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
         <div>
           <AlertDialog
@@ -118,6 +136,9 @@ class PrizesPage extends Component {
 
 PrizesPage.propTypes = {
   page: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  rowPerPage: PropTypes.number.isRequired,
+  sortBy: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   prizes: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   getAllPrizes: PropTypes.func.isRequired,
@@ -129,6 +150,7 @@ PrizesPage.propTypes = {
   isAllPrizesSelected: PropTypes.bool.isRequired,
   deselectAllPrizes: PropTypes.func.isRequired,
   selectAllPrizes: PropTypes.func.isRequired,
+  changePrizePage: PropTypes.func.isRequired,
 };
 
 PrizesPage.defaultProps = {
@@ -138,12 +160,16 @@ PrizesPage.defaultProps = {
 const mapStateToProps = ({ prize, ajaxCallsInProgress }) => ({
   prizes: prize.prizes,
   selectedPrizes: prize.selectedPrizes,
+  totalCount: prize.totalCount,
   isAllPrizesSelected: prize.isAllPrizesSelected,
   page: prize.page,
+  rowPerPage: prize.rowPerPage,
+  sortBy: prize.sortBy,
   isLoading: ajaxCallsInProgress > 0,
 });
 
 const mapDispatchToProps = dispatch => ({
+  changePrizePage: bindActionCreators(changePrizePage, dispatch),
   deselectAllPrizes: bindActionCreators(deselectAllPrizes, dispatch),
   selectAllPrizes: bindActionCreators(selectAllPrizes, dispatch),
   selectPrize: bindActionCreators(selectPrize, dispatch),

@@ -55,13 +55,13 @@ class PrizeListHead extends React.Component {
 
   render() {
     const {
-      onSelectAllClick,
-      order,
-      orderBy,
-      numSelected,
-      rowCount,
+      onSelectAllClick, sortBy, numSelected, rowCount,
     } = this.props;
 
+    const order = sortBy.split('_').length > 1 ? sortBy.split('_')[1] : 'asc';
+
+    const orderBy =
+      sortBy.split('_').length > 1 ? sortBy.split('_')[0] : sortBy;
     return (
       <TableHead>
         <TableRow>
@@ -106,8 +106,7 @@ PrizeListHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.string.isRequired,
-  orderBy: PropTypes.string.isRequired,
+  sortBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
 

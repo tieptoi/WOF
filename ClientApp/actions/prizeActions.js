@@ -16,10 +16,40 @@ export function selectAllPrizes() {
   return { type: types.SELECT_ALL_PRIZES };
 }
 
-export function getAllPrizesSuccess(prizes) {
+export function getAllPrizesSuccess(prizes, totalCount) {
   return {
     type: types.GET_ALL_PRIZES_SUCCESS,
     prizes,
+    totalCount,
+  };
+}
+
+export const changePrizePageSuccess = (prizes, page, totalCount) => ({
+  type: types.CHANGE_PRIZE_PAGE_SUCCESS,
+  prizes,
+  page,
+  totalCount,
+});
+
+export function changePrizePage(page, sortBy, rowPerPage) {
+  return (dispatch) => {
+    dispatch(beginAjaxCall());
+    const requestUrl = `api/prize?page=${page}&sortBy=${sortBy}&rowPerPage=${rowPerPage}`;
+    debugger;
+    const request = axios.get(requestUrl);
+    return request.then(
+      response =>
+        dispatch(changePrizePageSuccess(
+          response.data,
+          page,
+          Number(response.headers['x-total-count']),
+        )),
+      (err) => {
+        dispatch(ajaxCallError());
+        dispatch(showNotificationMessage(err.message));
+        throw err;
+      },
+    );
   };
 }
 
@@ -28,7 +58,11 @@ export function getAllPrizes() {
     dispatch(beginAjaxCall());
     const request = axios.get('/api/prize');
     return request.then(
-      response => dispatch(getAllPrizesSuccess(response.data)),
+      response =>
+        dispatch(getAllPrizesSuccess(
+          response.data,
+          Number(response.headers['x-total-count']),
+        )),
       (err) => {
         dispatch(ajaxCallError());
         dispatch(showNotificationMessage(err.message));

@@ -61,6 +61,11 @@ namespace WOF.Services
             return _wofContext.Prizes.FirstOrDefault(x => x.Id == prizeId);
         }
 
+        public int GetTotalPrizes()
+        {
+            return _wofContext.Prizes.Count();
+        }
+
         public bool Save()
         {
             return(_wofContext.SaveChanges() > 0);

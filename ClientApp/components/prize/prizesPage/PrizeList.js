@@ -30,6 +30,9 @@ class PrizesList extends Component {
     const {
       page,
       prizes,
+      rowPerPage,
+      totalCount,
+      sortBy,
       selected,
       onEdit,
       onDelete,
@@ -38,6 +41,7 @@ class PrizesList extends Component {
       onSelectAllClick,
       onRowSelect,
       onChangePage,
+      onChangeRowsPerPage,
     } = this.props;
 
     return (
@@ -59,9 +63,8 @@ class PrizesList extends Component {
                 onRequestSort={onRequestSort}
                 numSelected={selected.length}
                 onSelectAllClick={onSelectAllClick}
-                order="asc"
-                orderBy="id"
-                rowCount={prizes.length}
+                sortBy={sortBy}
+                rowCount={totalCount}
               />
               <TableBody>
                 {prizes.map((prize) => {
@@ -81,11 +84,11 @@ class PrizesList extends Component {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    count={13}
-                    rowsPerPage={5}
-                    page={page}
-                    onChangePage={onChangePage}
-                    /* onChangeRowsPerPage={this.handleChangeRowsPerPage} */
+                    count={totalCount}
+                    rowsPerPage={rowPerPage}
+                    page={page - 1}
+                    onChangePage={(event, pageNo) => onChangePage(pageNo + 1)}
+                    onChangeRowsPerPage={onChangeRowsPerPage}
                   />
                 </TableRow>
               </TableFooter>
@@ -103,14 +106,18 @@ class PrizesList extends Component {
 PrizesList.propTypes = {
   prizes: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   selected: PropTypes.array,
+  totalCount: PropTypes.number.isRequired,
   classes: PropTypes.object.isRequired,
   page: PropTypes.number.isRequired,
+  rowPerPage: PropTypes.number.isRequired,
+  sortBy: PropTypes.string.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
   onRowSelect: PropTypes.func.isRequired,
   onChangePage: PropTypes.func.isRequired,
+  onChangeRowsPerPage: PropTypes.func.isRequired,
 };
 
 PrizesList.defaultProps = {

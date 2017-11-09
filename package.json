@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prestart": "webpack --config webpack.config.vendor.js",
-    "start": "npm-run-all --parallel watch:js dotnet",
+    "start": "npm-run-all --parallel watch:js watch:dotnet",
     "dotnet":
       "cross-env ASPNETCORE_ENVIRONMENT=Development NODE_ENV=development dotnet run",
     "build": "webpack --env.production --progress --hide-modules",

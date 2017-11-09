@@ -16,6 +16,7 @@ namespace WOF.Services
                                         Func<IQueryable<Prize>, IOrderedQueryable<Prize>> orderBy = null, int? page=1, 
                                         int? pageSize = 8, string includeProperties = "");
         void Update(Prize prize);
+        int GetTotalPrizes();
         bool Save();
 
     }

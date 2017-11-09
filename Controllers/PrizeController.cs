@@ -28,7 +28,7 @@ namespace WOF.Controllers
 		}
 
         [HttpGet]
-        public IActionResult GetPrizes([FromQuery] string sortBy,[FromQuery] string filterBy,[FromQuery] string searchString,[FromQuery] int? page = 1)
+        public IActionResult GetPrizes([FromQuery] string sortBy,[FromQuery] string filterBy,[FromQuery] string searchString,[FromQuery] int? page = 1, [FromQuery] int? rowPerPage = 5)
 		{
 			try
 			{
@@ -79,10 +79,12 @@ namespace WOF.Controllers
                     page = 1;
                 }
 
-                var prizeEntities = _prizeRepository.GetAllPrizes(filter, orderBy, page, 3);
+                var prizeEntities = _prizeRepository.GetAllPrizes(filter, orderBy, page, rowPerPage);
 
 				var results = AutoMapper.Mapper.Map<IEnumerable<PrizeDto>>(prizeEntities);
 
+                Request.HttpContext.Response.Headers.Add("X-Total-Count", _prizeRepository.GetTotalPrizes().ToString() );
+				
 				return Ok(results);
 			}
 			catch (Exception ex)

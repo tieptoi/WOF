@@ -3,8 +3,17 @@ import initialState from './initialState';
 
 export default function prizesReducer(state = initialState.prize, action) {
   switch (action.type) {
+    case types.CHANGE_PRIZE_PAGE_SUCCESS:
+      return Object.assign({}, state, {
+        prizes: action.prizes,
+        page: action.page,
+        totalCount: action.totalCount,
+      });
     case types.GET_ALL_PRIZES_SUCCESS:
-      return Object.assign({}, state, { prizes: action.prizes });
+      return Object.assign({}, state, {
+        prizes: action.prizes,
+        totalCount: action.totalCount,
+      });
     case types.CREATE_PRIZE_SUCCESS: {
       let newState = state.prizes.slice();
       newState = newState.concat(action.prize);
